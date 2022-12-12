@@ -10,28 +10,20 @@ from datetime import datetime
 @app.route('/')
 @app.route('/home')
 def home_page():
-    return render_template('index.html')
-
-
-@app.route('/portal')
-def portal_page():
-    return render_template('portal.html')
+    return render_template('home.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
     form = RegisterForm()
     if form.validate_on_submit():
-        now = datetime.now()
-        timestamp = "Account created on " + now.strftime("%m/%d/%Y, %H:%M:%S")
         user_to_create = Users(username=form.username.data,
                                email_address=form.email_address.data,
-                               password=form.password1.data,
-                               log=timestamp)
+                               password=form.password1.data)
         db.session.add(user_to_create)
         db.session.commit()
         login_user(user_to_create)
         flash(f"Account created successfully! You are now logged in as {user_to_create.username}", category='success')
-        return render_template('exam.html')
+        return render_template('form.html')
 
     if form.errors != {}:
         for err_msg in form.errors.values():
@@ -51,7 +43,7 @@ def login_page():
         ):
             login_user(attempted_user)
             flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
-            return render_template('portal.html')
+            return render_template('form.html')
 
         else:
             flash('Username and password are not match! Please try again', category='danger')
@@ -63,4 +55,4 @@ def login_page():
 def logout_page():
     logout_user()
     flash("You have been logged out!", category='info')
-    return render_template('index.html')
+    return render_template('home.html')
