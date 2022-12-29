@@ -22,7 +22,7 @@ def register_page():
         db.session.commit()
         login_user(user_to_create)
         flash(f"Account created successfully! You are now logged in as {user_to_create.username}", category='success')
-        return render_template('monitor.html')
+        return monitor_page()
 
     if form.errors != {}:
         for err_msg in form.errors.values():
@@ -42,10 +42,14 @@ def login_page():
         ):
             login_user(attempted_user)
             flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
-            return render_template('monitor.html')
+            return monitor_page()
 
         else:
             flash('Username and password are not match! Please try again', category='danger')
+
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            flash(f'There was an error with logging in: {err_msg}', category='danger')
 
     return render_template('login.html', form=form)
 
@@ -61,16 +65,10 @@ def logout_page():
 def monitor_page():
     form = MonitorForm()
     if form.validate_on_submit():
-        attempted_user = Users.query.filter_by(username=form.username.data).first()
+        flash('Welcome to monitor page', category='success')
 
-        if attempted_user and attempted_user.check_password_correction(
-                attempted_password=form.password.data
-        ):
-            login_user(attempted_user)
-            flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
-            return render_template('monitor.html')
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
 
-        else:
-            flash('Username and password are not match! Please try again', category='danger')
-
-    return render_template('login.html', form=form)
+    return render_template('monitor.html', form=form)

@@ -6,15 +6,101 @@ Monitor Page
 {% block content %}
 <body class="text-center">
 <div class="container">
-    <form method="POST" class="form-register" style="color:black">
-        {{ form.hidden_tag() }}
-        <br>
-        <br>
-        <h1 class="h3 mb-3 font-weight-normal">
-            Please Enter your details
-        </h1>
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark" style="color:white">
+        <p class="lead font-weight-normal">Please fill out this form to start monitoring your health</p>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-sm">
+                    <br>
+                    {{ form.f_name.label() }}
+                    <br>
+                    {{ form.f_name(placeholder="First Name") }}
+                    <br>
+                    {{ form.height.label() }}
+                    <br>
+                    {{ form.height(placeholder="Height cm") }}
+                    <br>
+                    {{ form.dia_bp.label() }}
+                    <br>
+                    {{ form.dia_bp(placeholder="Diastolic BP mmHg") }}
+                    <br>
+                    {{ form.glucose.label() }}
+                    <br>
+                    {{ form.glucose(placeholder="Glucose mg/dL") }}
+                    <br>
+                    {{ form.heart_rate.label() }}
+                    <br>
+                    {{ form.heart_rate(placeholder="Heart Rate BPM") }}
+                </div>
+                <div class="col-sm">
+                    <br>
+                    {{ form.l_name.label() }}
+                    <br>
+                    {{ form.l_name(placeholder="Last Name") }}
+                    <br>
+                    {{ form.weight.label() }}
+                    <br>
+                    {{ form.weight(placeholder="Weight kg") }}
+                    <br>
+                    {{ form.sys_bp.label() }}
+                    <br>
+                    {{ form.sys_bp(placeholder="Systolic BP mmHg") }}
+                    <br>
+                    {{ form.tot_chol.label() }}
+                    <br>
+                    {{ form.tot_chol(placeholder="Total Cholesterol mg/dL") }}
+                    <br>
+                    {{ form.cigs_per_day.label() }}
+                    <br>
+                    {{ form.cigs_per_day(placeholder="Number of cigarettes") }}
+                </div>
+                <div class="col-sm">
+                    <br>
+                    {{ form.sex.label() }}
+                    <br>
+                    {{ form.sex(placeholder="Sex") }}
+                    <br>
+                    {{ form.dob.label() }}
+                    <br>
+                    {{ form.dob(placeholder="Date of Birth") }}
+                    <br>
+                    {{ form.education.label() }}
+                    <br>
+                    {{ form.education(placeholder="Education") }}
 
-    </form>
+                </div>
+                <div class="col-sm">
+                    <br>
+                    {{ form.bp_meds.label() }}
+                    <br>
+                    {{ form.bp_meds(placeholder="BP Medication") }}
+                    <br>
+                    {{ form.current_smoker.label() }}
+                    <br>
+                    {{ form.current_smoker(placeholder="Current Smoker") }}
+                    <br>
+                    {{ form.prevalent_stroke.label() }}
+                    <br>
+                    {{ form.prevalent_stroke(placeholder="Previous Stroke") }}
+                    <br>
+                    {{ form.prevalent_hyp.label() }}
+                    <br>
+                    {{ form.prevalent_hyp(placeholder="Previous Hypertensive") }}
+                    <br>
+                    {{ form.diabetes.label() }}
+                    <br>
+                    {{ form.diabetes(placeholder="Diabetes") }}
+                </div>
+            </div>
+
+            <br>
+
+            {{ form.submit(class="btn btn-primary") }}
+
+        </form>
+
+    </div>
 </div>
 </body>
 {% endblock %}
