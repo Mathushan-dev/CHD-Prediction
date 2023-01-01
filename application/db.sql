@@ -3,15 +3,9 @@ CREATE TABLE users (
     username VARCHAR(30) NOT NULL,
     email_address VARCHAR(50) NOT NULL,
     password_hash VARCHAR(60) NOT NULL,
-
-    #optional
-    f_name VARCHAR(30),
-    l_name VARCHAR(30),
-    dob DATE,
-    #0-male, 1-female
+    age SMALLINT,
     sex SMALLINT,
-    weight SMALLINT,
-    height SMALLINT,
+    bmi SMALLINT,
     sys_bp SMALLINT,
     dia_bp SMALLINT,
     glucose SMALLINT,
