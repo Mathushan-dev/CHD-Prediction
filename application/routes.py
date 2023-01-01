@@ -61,11 +61,22 @@ def logout_page():
     return render_template('home.html')
 
 
+def extract_health_factors(form):
+    return {"f_name" : form.f_name.data.strip(), "l_name" : form.l_name.data.strip(), "dob" : form.dob.data,
+            "sex" : form.sex.data.strip(), "weight" : form.weight.data, "height" : form.height.data,
+            "sys_bp" : form.sys_bp.data, "dia_bp" : form.dia_bp.data, "glucose" : form.glucose.data,
+            "tot_chol" : form.tot_chol.data, "cigs_per_day" : form.cigs_per_day.data, "prevalent_hyp" : form.prevalent_hyp.data,
+            "bp_meds" : form.bp_meds.data, "diabetes" : form.diabetes.data, "education" : form.education.data,
+            "current_smoker" : form.current_smoker.data, "heart_rate" : form.heart_rate.data, "prevalent_stroke" : form.prevalent_stroke.data}
+
+
+
 @app.route('/monitor', methods=['GET', 'POST'])
 def monitor_page():
     form = MonitorForm()
     if form.validate_on_submit():
-        flash('Welcome to monitor page', category='success')
+        health_factors = extract_health_factors(form)
+        flash(f'Processing your details. Please wait.', category='success')
 
     if form.errors != {}:
         for err_msg in form.errors.values():
