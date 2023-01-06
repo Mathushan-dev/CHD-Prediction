@@ -31,7 +31,7 @@ def predict(X_new_dict):
     X_new = [[int(X_new_dict['sex']), int(X_new_dict['age']), int(X_new_dict['education']), int(X_new_dict['current_smoker']),
              int(X_new_dict['cigs_per_day']), int(X_new_dict['bp_meds']), int(X_new_dict['prevalent_stroke']),
              int(X_new_dict['prevalent_hyp']), int(X_new_dict['diabetes']), int(X_new_dict['tot_chol']), int(X_new_dict['sys_bp']),
-             int(X_new_dict['dia_bp']), int(X_new_dict['bmi']), int(X_new_dict['heart_rate']), int(X_new_dict['glucose'])]]
+             int(X_new_dict['dia_bp']), int(round(X_new_dict['weight']/(X_new_dict['height']**2))), int(X_new_dict['heart_rate']), int(X_new_dict['glucose'])]]
     X_train, y_train = prediction_preprocessing()
     knn_prediction = predict_knn(X_train, y_train, X_new)
     mlp_prediction = predict_mlp(X_train, y_train, X_new)

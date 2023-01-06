@@ -31,7 +31,8 @@ class LoginForm(FlaskForm):
 class MonitorForm(FlaskForm):
     age = IntegerField('Age in Years:', validators=[DataRequired()])
     sex = SelectField('Sex:', validators=[DataRequired()], choices=[(1, 'Male'), (0, 'Female')])
-    bmi = IntegerField('BMI:', validators=[DataRequired()])
+    height = IntegerField('Height m:', validators=[DataRequired()])
+    weight = IntegerField('Weight kg:', validators=[DataRequired()])
     sys_bp = IntegerField('Systolic BP mmHg:', validators=[DataRequired()])
     dia_bp = IntegerField('Diastolic BP mmHg:', validators=[DataRequired()])
     glucose = IntegerField('Glucose mg/dL:', validators=[DataRequired()])
@@ -41,7 +42,7 @@ class MonitorForm(FlaskForm):
     bp_meds = SelectField('BP Medication:', validators=[DataRequired()], choices=[(0, 'No'), (1, 'Yes')])
     diabetes = SelectField('Diabetes:', validators=[DataRequired()], choices=[(0, 'No'), (1, 'Yes')])
     education = SelectField('Education:', validators=[DataRequired()],
-                            choices=[(1, 'High School'), (2, 'High School or GED'), (3, 'College or Vocational School'),
+                            choices=[(1, 'High School'), (2, 'GED'), (3, 'Vocational School'),
                                      (4, 'College')])
     current_smoker = SelectField('Current Smoker:', validators=[DataRequired()], choices=[(0, 'No'), (1, 'Yes')])
     heart_rate = IntegerField('Heart Rate BPM:', validators=[DataRequired()])

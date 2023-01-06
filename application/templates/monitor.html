@@ -13,17 +13,53 @@ Monitor Page
             <div class="row">
                 <div class="col-sm">
                     <br>
+                    {{ form.sys_bp.label() }}
+                    <br>
+                    {{ form.sys_bp(placeholder="Systolic BP mmHg") }}
+                    <br>
+                    {{ form.weight.label() }}
+                    <br>
+                    {{ form.weight(placeholder="Weight kg") }}
+                    <br>
+                    {{ form.cigs_per_day.label() }}
+                    <br>
+                    {{ form.cigs_per_day(placeholder="Number of cigarettes") }}
+                </div>
+                <div class="col-sm">
+                    <br>
                     {{ form.dia_bp.label() }}
                     <br>
                     {{ form.dia_bp(placeholder="Diastolic BP mmHg") }}
+                    <br>
+                    {{ form.height.label() }}
+                    <br>
+                    {{ form.height(placeholder="Height m") }}
+                    <br>
+                    {{ form.tot_chol.label() }}
+                    <br>
+                    {{ form.tot_chol(placeholder="Total Cholesterol mg/dL") }}
+                    <br>
+                    {{ form.education.label() }}
+                    <br>
+                    {{ form.education(placeholder="Education") }}
+                </div>
+                <div class="col-sm">
                     <br>
                     {{ form.heart_rate.label() }}
                     <br>
                     {{ form.heart_rate(placeholder="Heart Rate BPM") }}
                     <br>
-                    {{ form.cigs_per_day.label() }}
+                    {{ form.age.label() }}
                     <br>
-                    {{ form.cigs_per_day(placeholder="Number of cigarettes") }}
+                    {{ form.age(placeholder="Age") }}
+                    <br>
+                    {{ form.glucose.label() }}
+                    <br>
+                    {{ form.glucose(placeholder="Glucose mg/dL") }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
                     <br>
                     {{ form.bp_meds.label() }}
                     <br>
@@ -35,50 +71,25 @@ Monitor Page
                 </div>
                 <div class="col-sm">
                     <br>
-                    {{ form.sys_bp.label() }}
+                    {{ form.sex.label() }}
                     <br>
-                    {{ form.sys_bp(placeholder="Systolic BP mmHg") }}
-                    <br>
-                    {{ form.bmi.label() }}
-                    <br>
-                    {{ form.bmi(placeholder="BMI") }}
-                    <br>
-                    {{ form.tot_chol.label() }}
-                    <br>
-                    {{ form.tot_chol(placeholder="Total Cholesterol mg/dL") }}
+                    {{ form.sex(placeholder="Sex") }}
                     <br>
                     {{ form.current_smoker.label() }}
                     <br>
                     {{ form.current_smoker(placeholder="Current Smoker") }}
+                </div>
+                <div class="col-sm">
                     <br>
                     {{ form.diabetes.label() }}
                     <br>
                     {{ form.diabetes(placeholder="Diabetes") }}
-                </div>
-                <div class="col-sm">
-                    <br>
-                    {{ form.age.label() }}
-                    <br>
-                    {{ form.age(placeholder="Age") }}
-                    <br>
-                    {{ form.education.label() }}
-                    <br>
-                    {{ form.education(placeholder="Education") }}
-                    <br>
-                    {{ form.glucose.label() }}
-                    <br>
-                    {{ form.glucose(placeholder="Glucose mg/dL") }}
                     <br>
                     {{ form.prevalent_stroke.label() }}
                     <br>
                     {{ form.prevalent_stroke(placeholder="Previous Stroke") }}
-                    <br>
-                    {{ form.sex.label() }}
-                    <br>
-                    {{ form.sex(placeholder="Sex") }}
                 </div>
             </div>
-
             <br>
 
             {{ form.submit(class="btn btn-primary") }}

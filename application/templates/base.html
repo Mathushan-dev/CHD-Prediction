@@ -23,7 +23,10 @@
             </li>
             {% if current_user.is_authenticated %}
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('monitor_page') }}">Monitor<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ url_for('monitor_page') }}">Monitor Manually<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('monitor_fitbit_page') }}">Monitor Fitbit<span class="sr-only">(current)</span></a>
             </li>
             {% endif %}
         </ul>

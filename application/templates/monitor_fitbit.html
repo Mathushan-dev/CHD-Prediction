@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}
+Monitor Fitbit Page
+{% endblock %}
+{% block content %}
+
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-dark" style="color:white">
+    <h1 class="display-4 font-weight-normal">Monitor using Fitbit</h1>
+    <p class="lead font-weight-normal">Start monitoring your risk of developing Coronary Heart Disease using your Fitbit</p>
+
+    <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script>
+    <script src='https://developer.zivacare.com/connect.js'></script>
+
+
+    <button class='btn btn-small btn-info' id='connect-health-data-btn'>
+      <img alt="" src="https://developer.zivacare.com/bundles/zivacareadmin/images/logo_icon.png">
+      <strong>CONNECT</strong> HEALTH DATA
+    </button>
+
+
+    <script>
+        var connectBtn = document.getElementById('connect-health-data-btn');
+        connectBtn.addEventListener('click', function (e) {
+            var opts = {
+                // Grab this from the app settings page.
+                clientId: '222_3cinarovgjwg4cws8sg80oc8kkgwg0socogc0soowo0kccggso',
+                // Can be e-mail (any other internal ID of the user, from your system).
+                clientUserId: 'zcabmm1@ucl.ac.uk',
+                finish: function(err, responseObject) {
+                    // When the user finishes the health data connection to your app, the `finish` function will be called.
+                    // `responseObject` object will have a specialToken field in it.
+                    // You need to pass this `specialToken` back to us, along with `CLIENT_SECRET`
+                    // Send a `POST` request to the `https://developer.zivacare.com/oauth/v2/get-access-token` endpoint.
+                    // In return you will get `accessToken` for your user, which can be used to query ZivaCare API.
+
+                    // Sending POST request with jQuery might look like this.
+                    // NOTE: it's not necessary to use jQuery.
+                    var data = {
+                        // Grab this from the app settings page.
+                        clientSecret: '49y558fxop8gos80kk4c0ww004k8owgg4go4gk8ogg8skw0cs0',
+                        specialToken: responseObject.specialToken
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        url: 'https://developer.zivacare.com/oauth/v2/get-access-token',
+                        data: data,
+                        success: function(data) {
+                            // The response is a JSON with this structure:
+                            /*
+                            {
+                              "ziva_user_code": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                              "name": "xxxxxxxxxxxxxxx...",
+                              "email": "xxxxxxxxxxxxxxx...",
+                              "access_token": "xxxxxxxxxxxxxxx..."
+                            }
+                            */
+
+                            window.console && console.log(data);
+                            alert('The aceess token for your user is: ' + data.access_token);
+                        },
+                        error: function() {
+                            window.console && console.log('Error getting the access token.');
+                        }
+                    });
+                },
+                close: function() {
+                    // Do something when the user closed popup.
+                    // The `close` callback function is optional.
+                }
+            };
+            ZivaConnect.open(opts);
+        });
+    </script>
+    <!--<a class="btn btn-primary" href="{{ url_for('monitor_page') }}">Connect to Fitbit</a>-->
+  <div class="product-device box-shadow d-none d-md-block"></div>
+  <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+</div>
+{% endblock %}
