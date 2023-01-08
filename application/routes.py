@@ -114,18 +114,20 @@ def monitor_page():
 @app.route('/monitor_fitbit', methods=['GET', 'POST'])
 @login_required
 def monitor_fitbit_page():
-    form = MonitorForm()
-    if form.validate_on_submit():
-        health_factors = extract_health_factors(form)
-        save_to_database(health_factors)
-        prediction = predict(health_factors)
-        return result_page(prediction)
+    import requests
+    from requests.structures import CaseInsensitiveDict
 
-    if form.errors != {}:
-        for err_msg in form.errors.values():
-            flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
+    url = "https://developer.nestore-coach.eu/api/v1/user_profile/MmZkM2NjNTI1M2NiNTBkZmI2NGEzYmQxNTk3NmE2YWE4NTUyZDIxMTU4NWM1YzU2ZTRiNmQzYWRmOGE0ZDdlNw"
 
-    return render_template('monitor_fitbit.html', form=form, id=current_user.email_address)
+    headers = CaseInsensitiveDict()
+    headers["accept"] = "application/json"
+
+
+    resp = requests.get(url, headers=headers)
+
+    print(resp.text)
+
+    return render_template('monitor_fitbit.html', id=current_user.email_address)
 
 
 @app.route('/result', methods=['GET', 'POST'])
