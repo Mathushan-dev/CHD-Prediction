@@ -115,18 +115,17 @@ def monitor_page():
 @login_required
 def monitor_fitbit_page():
     import requests
+    import json
     from requests.structures import CaseInsensitiveDict
-
-    url = "https://developer.nestore-coach.eu/api/v1/user_profile/MmZkM2NjNTI1M2NiNTBkZmI2NGEzYmQxNTk3NmE2YWE4NTUyZDIxMTU4NWM1YzU2ZTRiNmQzYWRmOGE0ZDdlNw"
-
+    url = "https://api.zivacare.com/api/v2/human/heights?access_token=demo"
     headers = CaseInsensitiveDict()
     headers["accept"] = "application/json"
-
-
     resp = requests.get(url, headers=headers)
-
     print(resp.text)
 
+    url = "https://api.zivacare.com/api/v2/human/blood_pressures?access_token=demo"
+    resp = requests.get(url, headers=headers)
+    print(json.loads(resp.text))
     return render_template('monitor_fitbit.html', id=current_user.email_address)
 
 
