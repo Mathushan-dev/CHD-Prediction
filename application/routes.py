@@ -1,10 +1,13 @@
 from application import app
-from application.prediction import predict
+from application.prediction import predict, predict_fitbit
 from flask import render_template, redirect, url_for, flash, request, session
 from application.models import Users
-from application.forms import RegisterForm, LoginForm, MonitorForm
+from application.forms import RegisterForm, LoginForm, MonitorForm, MonitorFitbitForm
 from application import db
 from flask_login import login_user, logout_user, login_required, current_user
+import requests
+import json
+from requests.structures import CaseInsensitiveDict
 
 
 @app.route('/')
@@ -64,13 +67,44 @@ def logout_page():
     return render_template('home.html')
 
 
-def extract_health_factors(form):
-    return {"age": form.age.data, "sex": form.sex.data.strip(), "height": form.height.data,
-            "weight": form.weight.data, "prevalent_stroke": form.prevalent_stroke.data, "sys_bp": form.sys_bp.data,
-            "dia_bp": form.dia_bp.data, "glucose": form.glucose.data, "tot_chol": form.tot_chol.data,
-            "cigs_per_day": form.cigs_per_day.data, "prevalent_hyp": form.prevalent_hyp.data,
-            "bp_meds": form.bp_meds.data, "diabetes": form.diabetes.data, "education": form.education.data,
-            "current_smoker": form.current_smoker.data, "heart_rate": form.heart_rate.data}
+def extract_health_factors(form, fitbit=False):
+    if not fitbit:
+        return {"age": form.age.data, "sex": form.sex.data.strip(), "height": form.height.data,
+                "weight": form.weight.data, "prevalent_stroke": form.prevalent_stroke.data, "sys_bp": form.sys_bp.data,
+                "dia_bp": form.dia_bp.data, "glucose": form.glucose.data, "tot_chol": form.tot_chol.data,
+                "cigs_per_day": form.cigs_per_day.data, "prevalent_hyp": form.prevalent_hyp.data,
+                "bp_meds": form.bp_meds.data, "diabetes": form.diabetes.data, "education": form.education.data,
+                "current_smoker": form.current_smoker.data, "heart_rate": form.heart_rate.data}
+
+    headers = CaseInsensitiveDict()
+    headers["accept"] = "application/json"
+    heights_data = requests.get("https://api.zivacare.com/api/v2/human/heights?access_token=demo",
+                                headers=headers).json()
+    heights_value = str(json.loads(list(heights_data.values())[0][-1])["value"])
+
+    weights_data = requests.get("https://api.zivacare.com/api/v2/human/weights?access_token=demo",
+                                headers=headers).json()
+    weights_value = str(json.loads(list(weights_data.values())[0][-1])["value"])
+
+    pressures_data = requests.get("https://api.zivacare.com/api/v2/human/blood_pressures?access_token=demo",
+                                  headers=headers).json()
+    systolic_value = str(json.loads(list(pressures_data.values())[0][-1])["systolic"])
+    diastolic_value = str(json.loads(list(pressures_data.values())[0][-1])["diastolic"])
+    heart_rate_value = str(json.loads(list(pressures_data.values())[0][-1])["heart_rate"])
+
+    glucoses_data = requests.get("https://api.zivacare.com/api/v2/human/blood_glucoses?access_token=demo",
+                                 headers=headers).json()
+    glucose_value = str(json.loads(list(glucoses_data.values())[0][-1])["value"])
+
+    #print(heights_value, weights_value, systolic_value, diastolic_value, heart_rate_value, glucose_value)
+    return {"age": int(current_user.age), "sex": int(current_user.sex), "height": int(float(heights_value)),
+            "weight": int(float(weights_value)), "prevalent_stroke": int(current_user.prevalent_stroke),
+            "sys_bp": int(systolic_value),
+            "dia_bp": int(diastolic_value), "glucose": int(glucose_value), "tot_chol": int(current_user.tot_chol),
+            "cigs_per_day": int(current_user.cigs_per_day), "prevalent_hyp": int(current_user.prevalent_hyp),
+            "bp_meds": int(current_user.bp_meds), "diabetes": int(current_user.diabetes),
+            "education": int(current_user.education),
+            "current_smoker": int(current_user.current_smoker), "heart_rate": int(heart_rate_value)}
 
 
 def save_to_database(health_factors):
@@ -114,19 +148,18 @@ def monitor_page():
 @app.route('/monitor_fitbit', methods=['GET', 'POST'])
 @login_required
 def monitor_fitbit_page():
-    import requests
-    import json
-    from requests.structures import CaseInsensitiveDict
-    url = "https://api.zivacare.com/api/v2/human/heights?access_token=demo"
-    headers = CaseInsensitiveDict()
-    headers["accept"] = "application/json"
-    resp = requests.get(url, headers=headers)
-    print(resp.text)
+    form = MonitorFitbitForm()
+    if form.validate_on_submit():
+        health_factors = extract_health_factors(form, True)
+        save_to_database(health_factors)
+        prediction = predict_fitbit(health_factors)
+        return result_page(prediction)
 
-    url = "https://api.zivacare.com/api/v2/human/blood_pressures?access_token=demo"
-    resp = requests.get(url, headers=headers)
-    print(json.loads(resp.text))
-    return render_template('monitor_fitbit.html', id=current_user.email_address)
+    if form.errors != {}:
+        for err_msg in form.errors.values():
+            flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
+
+    return render_template('monitor_fitbit.html', form=form, id=current_user.email_address)
 
 
 @app.route('/result', methods=['GET', 'POST'])

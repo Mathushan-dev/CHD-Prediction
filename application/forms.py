@@ -31,7 +31,7 @@ class LoginForm(FlaskForm):
 class MonitorForm(FlaskForm):
     age = IntegerField('Age in Years:', validators=[DataRequired()])
     sex = SelectField('Sex:', validators=[DataRequired()], choices=[(1, 'Male'), (0, 'Female')])
-    height = IntegerField('Height m:', validators=[DataRequired()])
+    height = IntegerField('Height cm:', validators=[DataRequired()])
     weight = IntegerField('Weight kg:', validators=[DataRequired()])
     sys_bp = IntegerField('Systolic BP mmHg:', validators=[DataRequired()])
     dia_bp = IntegerField('Diastolic BP mmHg:', validators=[DataRequired()])
@@ -47,4 +47,8 @@ class MonitorForm(FlaskForm):
     current_smoker = SelectField('Current Smoker:', validators=[DataRequired()], choices=[(0, 'No'), (1, 'Yes')])
     heart_rate = IntegerField('Heart Rate BPM:', validators=[DataRequired()])
     prevalent_stroke = SelectField('Previous Stroke:', validators=[DataRequired()], choices=[(0, 'No'), (1, 'Yes')])
+    submit = SubmitField(label='Monitor My Health')
+
+
+class MonitorFitbitForm(FlaskForm):
     submit = SubmitField(label='Monitor My Health')

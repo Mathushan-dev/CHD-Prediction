@@ -16,6 +16,11 @@ Monitor Fitbit Page
       <img alt="" src="https://developer.zivacare.com/bundles/zivacareadmin/images/logo_icon.png">
       <strong>CONNECT</strong> HEALTH DATA
     </button>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <br>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
 
 
     <script>
