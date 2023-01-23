@@ -67,7 +67,7 @@ def logout_page():
     return render_template('home.html')
 
 
-def extract_health_factors(form, fitbit=False):
+def extract_from_form(form, fitbit=False):
     if not fitbit:
         return {"age": form.age.data, "sex": form.sex.data.strip(), "height": form.height.data,
                 "weight": form.weight.data, "prevalent_stroke": form.prevalent_stroke.data, "sys_bp": form.sys_bp.data,
@@ -96,7 +96,7 @@ def extract_health_factors(form, fitbit=False):
                                  headers=headers).json()
     glucose_value = str(json.loads(list(glucoses_data.values())[0][-1])["value"])
 
-    #print(heights_value, weights_value, systolic_value, diastolic_value, heart_rate_value, glucose_value)
+    # print(heights_value, weights_value, systolic_value, diastolic_value, heart_rate_value, glucose_value)
     return {"age": int(current_user.age), "sex": int(current_user.sex), "height": int(float(heights_value)),
             "weight": int(float(weights_value)), "prevalent_stroke": int(current_user.prevalent_stroke),
             "sys_bp": int(systolic_value),
@@ -133,7 +133,7 @@ def save_to_database(health_factors):
 def monitor_page():
     form = MonitorForm()
     if form.validate_on_submit():
-        health_factors = extract_health_factors(form)
+        health_factors = extract_from_form(form)
         save_to_database(health_factors)
         prediction = predict(health_factors)
         return result_page(prediction)
@@ -150,7 +150,7 @@ def monitor_page():
 def monitor_fitbit_page():
     form = MonitorFitbitForm()
     if form.validate_on_submit():
-        health_factors = extract_health_factors(form, True)
+        health_factors = extract_from_form(form, True)
         save_to_database(health_factors)
         prediction = predict_fitbit(health_factors)
         return result_page(prediction)
@@ -160,6 +160,21 @@ def monitor_fitbit_page():
             flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
 
     return render_template('monitor_fitbit.html', form=form, id=current_user.email_address)
+
+
+def extract_from_database():
+    return {"age": current_user.age, "sex": current_user.sex, "height": current_user.height,
+            "weight": current_user.weight, "prevalent_stroke": current_user.prevalent_stroke, "sys_bp": current_user.sys_bp,
+            "dia_bp": current_user.dia_bp, "glucose": current_user.glucose, "tot_chol": current_user.tot_chol,
+            "cigs_per_day": current_user.cigs_per_day, "prevalent_hyp": current_user.prevalent_hyp,
+            "bp_meds": current_user.bp_meds, "diabetes": current_user.diabetes, "education": current_user.education,
+            "current_smoker": current_user.current_smoker, "heart_rate": current_user.heart_rate}
+
+
+@app.route('/view_health', methods=['GET', 'POST'])
+@login_required
+def view_health_page():
+    return render_template('view_health.html', health=health)
 
 
 @app.route('/result', methods=['GET', 'POST'])
