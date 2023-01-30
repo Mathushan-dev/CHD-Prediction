@@ -174,10 +174,10 @@ def extract_from_database():
 @app.route('/view_health', methods=['GET', 'POST'])
 @login_required
 def view_health_page():
-    return render_template('view_health.html', health=health)
+    return render_template('view_health.html', health=extract_from_database(), form=MonitorForm())
 
 
 @app.route('/result', methods=['GET', 'POST'])
 @login_required
 def result_page(prediction):
-    return render_template('result.html', prediction=prediction)
+    return render_template('result.html', prediction=1)

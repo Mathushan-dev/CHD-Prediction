@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+Monitor Page
+{% endblock %}
+
+{% block content %}
+<body class="text-center">
+<div class="container">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" style="color:black">
+        <p class="lead font-weight-normal">View your most recent health data</p>
+        <form>
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-sm">
+                    <br>
+                    {{ form.sys_bp.label() }}
+                    <br>
+                    {{health["sys_bp"]}}
+                    <br>
+                    {{ form.weight.label() }}
+                    <br>
+                    {{health["weight"]}}
+                    <br>
+                    {{ form.cigs_per_day.label() }}
+                    <br>
+                    {{health["cigs_per_day"]}}
+                </div>
+                <div class="col-sm">
+                    <br>
+                    {{ form.dia_bp.label() }}
+                    <br>
+                    {{health["dia_bp"]}}
+                    <br>
+                    {{ form.height.label() }}
+                    <br>
+                    {{health["height"]}}
+                    <br>
+                    {{ form.tot_chol.label() }}
+                    <br>
+                    {{health["tot_chol"]}}
+                </div>
+                <div class="col-sm">
+                    <br>
+                    {{ form.heart_rate.label() }}
+                    <br>
+                    {{health["heart_rate"]}}
+                    <br>
+                    {{ form.age.label() }}
+                    <br>
+                    {{health["age"]}}
+                    <br>
+                    {{ form.glucose.label() }}
+                    <br>
+                    {{health["glucose"]}}
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+</body>
+{% endblock %}
