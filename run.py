@@ -1,5 +1,6 @@
-from application import app
+from application import app, debug
+
 
 # Checks if the run.py file has executed directly and not imported
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=debug)

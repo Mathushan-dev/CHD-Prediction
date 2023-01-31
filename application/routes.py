@@ -1,13 +1,14 @@
-from application import app
-from application.prediction import predict, predict_fitbit
-from flask import render_template, redirect, url_for, flash, request, session
-from application.models import Users
-from application.forms import RegisterForm, LoginForm, MonitorForm, MonitorFitbitForm
-from application import db
-from flask_login import login_user, logout_user, login_required, current_user
-import requests
 import json
+
+import requests
+from flask import render_template, redirect, flash
+from flask_login import login_user, logout_user, login_required, current_user
 from requests.structures import CaseInsensitiveDict
+
+from application import app, db, debug
+from application.forms import RegisterForm, LoginForm, MonitorForm, MonitorFitbitForm
+from application.models import Users
+from application.prediction import predict, predict_fitbit
 
 
 @app.route('/')
@@ -27,7 +28,7 @@ def register_page():
         db.session.commit()
         login_user(user_to_create)
         flash(f"Account created successfully! You are now logged in as {user_to_create.username}", category='success')
-        return redirect('/monitor')
+        return redirect('/home')
 
     if form.errors != {}:
         for err_msg in form.errors.values():
@@ -59,10 +60,10 @@ def login_page():
     return render_template('login.html', form=form)
 
 
-@app.route('/logout')
-@login_required
+@app.route('/logout', methods=['GET', 'POST'])
 def logout_page():
-    logout_user()
+    if not debug:
+        logout_user()
     flash("You have been logged out!", category='info')
     return render_template('home.html')
 
@@ -129,7 +130,6 @@ def save_to_database(health_factors):
 
 
 @app.route('/monitor', methods=['GET', 'POST'])
-@login_required
 def monitor_page():
     form = MonitorForm()
     if form.validate_on_submit():
@@ -164,7 +164,8 @@ def monitor_fitbit_page():
 
 def extract_from_database():
     return {"age": current_user.age, "sex": current_user.sex, "height": current_user.height,
-            "weight": current_user.weight, "prevalent_stroke": current_user.prevalent_stroke, "sys_bp": current_user.sys_bp,
+            "weight": current_user.weight, "prevalent_stroke": current_user.prevalent_stroke,
+            "sys_bp": current_user.sys_bp,
             "dia_bp": current_user.dia_bp, "glucose": current_user.glucose, "tot_chol": current_user.tot_chol,
             "cigs_per_day": current_user.cigs_per_day, "prevalent_hyp": current_user.prevalent_hyp,
             "bp_meds": current_user.bp_meds, "diabetes": current_user.diabetes, "education": current_user.education,
