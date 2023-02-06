@@ -5,7 +5,7 @@ from flask import render_template, redirect, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from requests.structures import CaseInsensitiveDict
 
-from application import app, db, debug
+from application import app, db
 from application.forms import RegisterForm, LoginForm, MonitorForm, MonitorFitbitForm
 from application.models import Users
 from application.prediction import predict, predict_fitbit
@@ -18,12 +18,17 @@ def home_page():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register_page():
+def register_page(debug_form=False):
     form = RegisterForm()
-    if form.validate_on_submit():
-        user_to_create = Users(username=form.username.data,
-                               email_address=form.email_address.data,
-                               password=form.password1.data)
+    if form.validate_on_submit() or debug_form:
+        if not debug_form:
+            user_to_create = Users(username=form.username.data,
+                                   email_address=form.email_address.data,
+                                   password=form.password1.data)
+        else:
+            user_to_create = Users(username="test_debug",
+                                   email_address="test_debug@test_debug.com",
+                                   password="test_debug_password")
         db.session.add(user_to_create)
         db.session.commit()
         login_user(user_to_create)
@@ -38,14 +43,17 @@ def register_page():
 
 
 @app.route('/login', methods=['GET', 'POST'])
-def login_page():
+def login_page(debug_form=False):
     form = LoginForm()
-    if form.validate_on_submit():
-        attempted_user = Users.query.filter_by(username=form.username.data).first()
+    if form.validate_on_submit() or debug_form:
+        if debug_form:
+            attempted_user = Users.query.filter_by(username="test_debug").first()
+            password = "test_debug_password"
+        else:
+            attempted_user = Users.query.filter_by(username=form.username.data).first()
+            password = form.password.data
 
-        if attempted_user and attempted_user.check_password_correction(
-                attempted_password=form.password.data
-        ):
+        if attempted_user and attempted_user.check_password_correction(attempted_password=password):
             login_user(attempted_user)
             flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
             return redirect('/home')
@@ -61,14 +69,17 @@ def login_page():
 
 
 @app.route('/logout', methods=['GET', 'POST'])
-def logout_page():
-    if not debug:
-        logout_user()
+def logout_page(debug=False):
+    if debug:
+        login_page(debug_form=True)
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    logout_user()
     flash("You have been logged out!", category='info')
     return render_template('home.html')
 
 
-def extract_from_form(form, fitbit=False):
+def extract_from_form(form, fitbit=False, debug=False):
     if not fitbit:
         return {"age": form.age.data, "sex": form.sex.data.strip(), "height": form.height.data,
                 "weight": form.weight.data, "prevalent_stroke": form.prevalent_stroke.data, "sys_bp": form.sys_bp.data,
@@ -97,7 +108,10 @@ def extract_from_form(form, fitbit=False):
                                  headers=headers).json()
     glucose_value = str(json.loads(list(glucoses_data.values())[0][-1])["value"])
 
-    # print(heights_value, weights_value, systolic_value, diastolic_value, heart_rate_value, glucose_value)
+    if debug:
+        return {"height": int(float(heights_value)), "weight": int(float(weights_value)), "sys_bp": int(systolic_value),
+                "dia_bp": int(diastolic_value), "glucose": int(glucose_value), "heart_rate": int(heart_rate_value)}
+
     return {"age": int(current_user.age), "sex": int(current_user.sex), "height": int(float(heights_value)),
             "weight": int(float(weights_value)), "prevalent_stroke": int(current_user.prevalent_stroke),
             "sys_bp": int(systolic_value),
@@ -108,7 +122,7 @@ def extract_from_form(form, fitbit=False):
             "current_smoker": int(current_user.current_smoker), "heart_rate": int(heart_rate_value)}
 
 
-def save_to_database(health_factors):
+def save_to_database(health_factors):  # pragma: no cover
     current_user.age = health_factors['age']
     current_user.sex = health_factors['sex']
     current_user.height = health_factors['height']
@@ -130,39 +144,46 @@ def save_to_database(health_factors):
 
 
 @app.route('/monitor', methods=['GET', 'POST'])
-def monitor_page():
+def monitor_page(debug_form=False, debug=False, health_factors=None):
     form = MonitorForm()
-    if form.validate_on_submit():
-        health_factors = extract_from_form(form)
-        save_to_database(health_factors)
+    if form.validate_on_submit() or debug_form:
+        if not debug_form:
+            health_factors = extract_from_form(form)
+            save_to_database(health_factors)  # pragma: no cover
         prediction = predict(health_factors)
-        return result_page(prediction)
+        return result_page(prediction, debug_form)
 
     if form.errors != {}:
         for err_msg in form.errors.values():
             flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
 
+    if not (current_user.is_authenticated or debug):
+        return redirect("/login")
     return render_template('monitor.html', form=form)
 
 
 @app.route('/monitor_fitbit', methods=['GET', 'POST'])
-@login_required
-def monitor_fitbit_page():
+def monitor_fitbit_page(debug_form=False, debug=False, health_factors=None, email_address=None):
     form = MonitorFitbitForm()
-    if form.validate_on_submit():
-        health_factors = extract_from_form(form, True)
-        save_to_database(health_factors)
+    if form.validate_on_submit() or debug_form:
+        if not debug_form:
+            health_factors = extract_from_form(form, True)
+            save_to_database(health_factors)  # pragma: no cover
         prediction = predict_fitbit(health_factors)
-        return result_page(prediction)
+        return result_page(prediction, debug_form)
 
     if form.errors != {}:
         for err_msg in form.errors.values():
             flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
 
+    if not (current_user.is_authenticated or debug):
+        return redirect("/login")
+    if debug:
+        return render_template('monitor_fitbit.html', form=form, id=email_address)
     return render_template('monitor_fitbit.html', form=form, id=current_user.email_address)
 
 
-def extract_from_database():
+def extract_from_database():  # pragma: no cover
     return {"age": current_user.age, "sex": current_user.sex, "height": current_user.height,
             "weight": current_user.weight, "prevalent_stroke": current_user.prevalent_stroke,
             "sys_bp": current_user.sys_bp,
@@ -173,12 +194,16 @@ def extract_from_database():
 
 
 @app.route('/view_health', methods=['GET', 'POST'])
-@login_required
-def view_health_page():
-    return render_template('view_health.html', health=extract_from_database(), form=MonitorForm())
+def view_health_page(debug=False, health=None):
+    if not (current_user.is_authenticated or debug):
+        return redirect("/login")
+    if not debug:
+        health = extract_from_database()  # pragma: no cover
+    return render_template('view_health.html', health=health, form=MonitorForm())
 
 
 @app.route('/result', methods=['GET', 'POST'])
-@login_required
-def result_page(prediction):
-    return render_template('result.html', prediction=1)
+def result_page(prediction, debug_form):
+    if not (current_user.is_authenticated or debug_form):
+        return redirect("/login")
+    return render_template('result.html', prediction=prediction)

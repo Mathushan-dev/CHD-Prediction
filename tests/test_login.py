@@ -1,4 +1,5 @@
 from tests.test_application import test_application
+from application.routes import login_page, register_page
 
 
 def test_login():
@@ -13,3 +14,7 @@ def test_login():
         assert response.status_code == 200
         assert b'Please Login' in response.data
         assert b'Do not have an account?' in response.data
+        register_page(debug_form=True)
+        response = login_page(debug_form=True)
+        assert b'Redirecting...' in response.data
+        assert b'/home' in response.data

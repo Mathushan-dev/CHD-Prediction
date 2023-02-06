@@ -1,0 +1,2 @@
+pyenv exec coverage run -m pytest
+pyenv exec coverage html

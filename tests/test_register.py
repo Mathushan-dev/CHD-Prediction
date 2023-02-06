@@ -1,3 +1,4 @@
+from application.routes import register_page
 from tests.test_application import test_application
 
 
@@ -13,3 +14,6 @@ def test_register():
         assert response.status_code == 200
         assert b'Please Create your Account' in response.data
         assert b'Already have an account?' in response.data
+        response = register_page(debug_form=True)
+        assert b'Redirecting...' in response.data
+        assert b'/home' in response.data

@@ -5,3 +5,4 @@ chdpred
 *.pyc
 *.xml
 *.iml
+.coverage
