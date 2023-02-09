@@ -6,3 +6,4 @@ chdpred
 *.xml
 *.iml
 .coverage
+*.bak

@@ -88,14 +88,16 @@ gtag("config", "UA-30226049-12", {"anonymize_ip":true});
             <div id="primary" class=" nhsuk-grid-row nhsuk-width-restrict">
                 <div class="nhsuk-grid-column-full full-width">
                     <article id="post-108" class="post-108 page type-page status-publish hentry">
+                       {% if prediction == 0 %}
                         <header class="entry-header">
-                            <h1 class="entry-title">Your Prediction Results</h1> </header>
+                            <h1>Your Prediction Results</h1>
+                            <h2>Low Risk</h2>
+                        </header>
                         <div class="entry-content">
-                            {% if prediction == 0 %}
                             <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent">
                                 <div class="nhsuk-card--care__heading-container">
                                     <h2 class="nhsuk-card--care__heading">
-                                        <span role="text"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span>Low Risk - Ask for a GP appointment if:</span>
+                                        <span role="text"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span>Ask for a GP appointment if:</span>
                                     </h2>
                                     <span class="nhsuk-card--care__arrow" aria-hidden="true"></span>
                                 </div>
@@ -117,7 +119,10 @@ gtag("config", "UA-30226049-12", {"anonymize_ip":true});
                                 </div>
                             </div>
                             {% else %}
-                            <div class="wp-block-nhsblocks-card1 nhsuk-grid-column-width nhsuk-care-card nhsuk-care-card--type is-style-warning-callout"><div class="nhsuk-care-card__heading-container"><h3 class="nhsuk-care-card__heading"><span role="heading" aria-level="3"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span><span class="nhsuk-care-card__heading-text">Increased Risk</span></span></h3><span class="nhsuk-care-card__arrow" aria-hidden="true"></span></div><div class="nhsuk-care-card__content"><p>The Coronary Heart Disease Prediction algorithm predicts you have a higher than normal chance of getting Coronary Heart Disease in the next 10 years. The NHS provides free help to those with a risk of developing Coronary Heart Disease. Please follow the links below for some changes to your lifestyle that will help you reduce your risk. Also do note the prediction algorithm used has a false positive rate of x and to obtain a more accurate result, contact your GP. Thank you for using our service.<br><br><a href="https://www.nhs.uk/service-search/find-a-gp">Find my nearest GP provider</a><br><a href="https://www.nhs.uk/conditions/coronary-heart-disease/">NHS guidance on increased risk of Coronary Heart Disease</a></p></div></div>
+                            <header class="entry-header">
+                                <h1>Your Prediction Results</h1>
+                                <h2>High Risk</h2>
+                            </header>
                             <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--urgent">
                                 <div class="nhsuk-card--care__heading-container">
                                     <h2 class="nhsuk-card--care__heading">
@@ -139,10 +144,11 @@ gtag("config", "UA-30226049-12", {"anonymize_ip":true});
                                         <li>coughing or wheezing</li>
                                     </ul>
                                     <p>In these situations, your GP can prescribe medicine to prevent complications. You need to take it within 24 hours of the spots coming out.</p>
-                                    </div>
+                                </div>
                             </div>
-                            {% endif %}
+                            <p>The Coronary Heart Disease Prediction algorithm predicts you have a higher than normal chance of getting Coronary Heart Disease in the next 10 years. The NHS provides free help to those with a risk of developing Coronary Heart Disease. Please follow the links below for some changes to your lifestyle that will help you reduce your risk. Also do note the prediction algorithm used has a false positive rate of x and to obtain a more accurate result, contact your GP. Thank you for using our service.<br><br><a href="https://www.nhs.uk/service-search/find-a-gp">Find my nearest GP provider</a><br><a href="https://www.nhs.uk/conditions/coronary-heart-disease/">NHS guidance on increased risk of Coronary Heart Disease</a></p>
                         </div>
+                        {% endif %}
                         <div class="nhsuk-content__clearfix"></div>
                     </article>
                 </div>
