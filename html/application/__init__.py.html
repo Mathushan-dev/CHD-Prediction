@@ -1,4 +1,4 @@
-<html><body><h1>application/__init__.py</h1>Killed 11 out of 24 mutants<h2>Survived</h2>Survived mutation testing. These mutants show holes in your test suite.<h3>Mutant 40</h3><pre>--- application/__init__.py
+<html><body><h1>application/__init__.py</h1>Killed 15 out of 19 mutants<h2>Survived</h2>Survived mutation testing. These mutants show holes in your test suite.<h3>Mutant 40</h3><pre>--- application/__init__.py
 +++ application/__init__.py
 @@ -7,7 +7,7 @@
  app = Flask(__name__)
@@ -8,7 +8,7 @@
 +app.config['SECRET_KEY'] = 'XXec9439cfc6c796ae2029594dXX'
  app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
- bootstrap = Bootstrap(app)
+ db = SQLAlchemy(app)
 </pre><h3>Mutant 42</h3><pre>--- application/__init__.py
 +++ application/__init__.py
 @@ -8,7 +8,7 @@
@@ -18,8 +18,8 @@
 -app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
 +app.config['XXSQLALCHEMY_ENGINE_OPTIONSXX'] = {"pool_pre_ping": True}
  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
- bootstrap = Bootstrap(app)
  db = SQLAlchemy(app)
+ bcrypt = Bcrypt(app)
 </pre><h3>Mutant 44</h3><pre>--- application/__init__.py
 +++ application/__init__.py
 @@ -8,7 +8,7 @@
@@ -29,8 +29,8 @@
 -app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
 +app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": False}
  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
- bootstrap = Bootstrap(app)
  db = SQLAlchemy(app)
+ bcrypt = Bcrypt(app)
 </pre><h3>Mutant 46</h3><pre>--- application/__init__.py
 +++ application/__init__.py
 @@ -9,7 +9,7 @@
@@ -39,104 +39,7 @@
  app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
 -app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 +app.config['XXSQLALCHEMY_TRACK_MODIFICATIONSXX'] = False
- bootstrap = Bootstrap(app)
- db = SQLAlchemy(app)
- bcrypt = Bcrypt(app)
-</pre><h3>Mutant 47</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -9,7 +9,7 @@
-     'SQLALCHEMY_DATABASE_URI'] = 'postgresql://lkgyopln:zKs1W4nghisnpNAF6GBYsVfuVBgcnoiK@surus.db.elephantsql.com/lkgyopln'
- app.config['SECRET_KEY'] = 'ec9439cfc6c796ae2029594d'
- app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
--app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
- bootstrap = Bootstrap(app)
- db = SQLAlchemy(app)
- bcrypt = Bcrypt(app)
-</pre><h3>Mutant 48</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -9,7 +9,7 @@
-     'SQLALCHEMY_DATABASE_URI'] = 'postgresql://lkgyopln:zKs1W4nghisnpNAF6GBYsVfuVBgcnoiK@surus.db.elephantsql.com/lkgyopln'
- app.config['SECRET_KEY'] = 'ec9439cfc6c796ae2029594d'
- app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
--app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = None
- bootstrap = Bootstrap(app)
- db = SQLAlchemy(app)
- bcrypt = Bcrypt(app)
-</pre><h3>Mutant 49</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -10,7 +10,7 @@
- app.config['SECRET_KEY'] = 'ec9439cfc6c796ae2029594d'
- app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
- app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
--bootstrap = Bootstrap(app)
-+bootstrap = None
  db = SQLAlchemy(app)
  bcrypt = Bcrypt(app)
  login_manager = LoginManager(app)
-</pre><h3>Mutant 53</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -14,7 +14,7 @@
- db = SQLAlchemy(app)
- bcrypt = Bcrypt(app)
- login_manager = LoginManager(app)
--login_manager.login_view = "login_page"
-+login_manager.login_view = "XXlogin_pageXX"
- login_manager.login_message_category = "info"
- debug = True
- from application import routes
-</pre><h3>Mutant 54</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -14,7 +14,7 @@
- db = SQLAlchemy(app)
- bcrypt = Bcrypt(app)
- login_manager = LoginManager(app)
--login_manager.login_view = "login_page"
-+login_manager.login_view = None
- login_manager.login_message_category = "info"
- debug = True
- from application import routes
-</pre><h3>Mutant 55</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -15,7 +15,7 @@
- bcrypt = Bcrypt(app)
- login_manager = LoginManager(app)
- login_manager.login_view = "login_page"
--login_manager.login_message_category = "info"
-+login_manager.login_message_category = "XXinfoXX"
- debug = True
- from application import routes
- 
-</pre><h3>Mutant 56</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -15,7 +15,7 @@
- bcrypt = Bcrypt(app)
- login_manager = LoginManager(app)
- login_manager.login_view = "login_page"
--login_manager.login_message_category = "info"
-+login_manager.login_message_category = None
- debug = True
- from application import routes
- 
-</pre><h3>Mutant 57</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -16,6 +16,6 @@
- login_manager = LoginManager(app)
- login_manager.login_view = "login_page"
- login_manager.login_message_category = "info"
--debug = True
-+debug = False
- from application import routes
- 
-</pre><h3>Mutant 58</h3><pre>--- application/__init__.py
-+++ application/__init__.py
-@@ -16,6 +16,6 @@
- login_manager = LoginManager(app)
- login_manager.login_view = "login_page"
- login_manager.login_message_category = "info"
--debug = True
-+debug = None
- from application import routes
- 
 </pre></body></html>

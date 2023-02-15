@@ -10,11 +10,8 @@ app.config[
 app.config['SECRET_KEY'] = 'ec9439cfc6c796ae2029594d'
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = "login_page"
-login_manager.login_message_category = "info"
 debug = True
 from application import routes
