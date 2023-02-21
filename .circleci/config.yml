@@ -13,7 +13,6 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
-            pip install pytest
             pytest tests
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
