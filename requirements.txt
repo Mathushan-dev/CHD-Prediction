@@ -7,6 +7,7 @@ Flask_WTF
 imbalanced_learn
 imblearn
 pandas
+pytest
 requests
 scikit_learn
 WTForms
