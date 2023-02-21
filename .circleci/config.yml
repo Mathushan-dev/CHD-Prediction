@@ -13,16 +13,12 @@ jobs:
             . venv/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
+            pip install pytest
+            pytest tests
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
             - "venv"
-      - run:
-          name: Running tests
-          command: |
-            . venv/bin/activate
-            pip install pytest
-            pytest tests
       - store_artifacts:
           path: test-reports/
           destination: python_app
