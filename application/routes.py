@@ -32,12 +32,12 @@ def register_page(debug_form=False):
         db.session.add(user_to_create)
         db.session.commit()
         login_user(user_to_create)
-        flash(f"Account created successfully! You are now logged in as {user_to_create.username}", category='success')
+        flash(f"You have successfully created an account {user_to_create.username}", category='success')
         return redirect('/home')
 
     if form.errors != {}:
-        for err_msg in form.errors.values():
-            flash(f'There was an error with creating a user: {err_msg}', category='danger')
+        for error_message in form.errors.values():
+            flash(f'{error_message}', category='danger')
 
     return render_template('register.html', form=form)
 
@@ -55,15 +55,15 @@ def login_page(debug_form=False):
 
         if attempted_user and attempted_user.check_password_correction(attempted_password=password):
             login_user(attempted_user)
-            flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
+            flash(f'You have successfully logged in {attempted_user.username}', category='success')
             return redirect('/home')
 
         else:
-            flash('Username and password are not match! Please try again', category='danger')
+            flash('Invalid login credentials', category='danger')
 
     if form.errors != {}:
-        for err_msg in form.errors.values():
-            flash(f'There was an error with logging in: {err_msg}', category='danger')
+        for error_message in form.errors.values():
+            flash(f'{error_message}', category='danger')
 
     return render_template('login.html', form=form)
 
@@ -75,7 +75,7 @@ def logout_page(debug=False):
     if not current_user.is_authenticated:
         return redirect('/login')
     logout_user()
-    flash("You have been logged out!", category='info')
+    flash("You have successfully logged out", category='info')
     return render_template('home.html')
 
 
@@ -154,8 +154,8 @@ def monitor_page(debug_form=False, debug=False, health_factors=None):
         return result_page(prediction, debug_form)
 
     if form.errors != {}:
-        for err_msg in form.errors.values():
-            flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
+        for error_message in form.errors.values():
+            flash(f'{error_message}', category='danger')
 
     if not (current_user.is_authenticated or debug):
         return redirect("/login")
@@ -173,8 +173,8 @@ def monitor_fitbit_page(debug_form=False, debug=False, health_factors=None, emai
         return result_page(prediction, debug_form)
 
     if form.errors != {}:
-        for err_msg in form.errors.values():
-            flash(f'There was an error with monitoring your health: {err_msg}', category='danger')
+        for error_message in form.errors.values():
+            flash(f'{error_message}', category='danger')
 
     if not (current_user.is_authenticated or debug):
         return redirect("/login")

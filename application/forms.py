@@ -8,24 +8,24 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username_to_check):
         user = Users.query.filter_by(username=username_to_check.data).first()
         if user:
-            raise ValidationError('Username already exists! Please try a different username')
+            raise ValidationError('An account with this username already exists')
 
     def validate_email_address(self, email_address_to_check):
         email_address = Users.query.filter_by(email_address=email_address_to_check.data).first()
         if email_address:
-            raise ValidationError('Email Address already exists! Please try a different email address')
+            raise ValidationError('An account with the same email address exists')
 
-    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
-    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
-    submit = SubmitField(label='Create Account')
+    username = StringField(label='username:', validators=[Length(min=1, max=20), DataRequired()])
+    email_address = StringField(label='email_address:', validators=[Email(), DataRequired()])
+    password1 = PasswordField(label='password:', validators=[Length(min=7), DataRequired()])
+    password2 = PasswordField(label='password:', validators=[EqualTo('password1'), DataRequired()])
+    submit = SubmitField(label='submit')
 
 
 class LoginForm(FlaskForm):
-    username = StringField(label='User Name:', validators=[DataRequired()])
-    password = PasswordField(label='Password:', validators=[DataRequired()])
-    submit = SubmitField(label='Sign in')
+    username = StringField(label='username:', validators=[DataRequired()])
+    password = PasswordField(label='password:', validators=[DataRequired()])
+    submit = SubmitField(label='submit')
 
 
 class MonitorForm(FlaskForm):
